@@ -75,21 +75,23 @@ def check_safety(status):
                     # check user name
                     if not any(word in tweet['user']['name'].lower() for word in slist):
 
-                        if tweet['possibly_sensitive'] == False:
+                        if len(status.text) > 6:
 
-                            # say its safe
-                            print('Got a safe tweet')
-                            print(status.text)
-                            return True
+                            if tweet['possibly_sensitive'] == False:
 
-                        # SHOW REMOVED TWEETS
-                        # if the tweet has kpop or porn on the username:
-                        else:
-                            print('FOUND A UNSAFE ONE!!! - possibly_sensitive')
-                            print(status.text)
-                            print(tweet['user']['name'])
-                            print(tweet['user']['description'])
-                            return False
+                                # say its safe
+                                print('Got a safe tweet')
+                                print(status.text)
+                                return True
+
+                            # SHOW REMOVED TWEETS
+                            # if the tweet has kpop or porn on the username:
+                            else:
+                                print('FOUND A UNSAFE ONE!!! - possibly_sensitive')
+                                print(status.text)
+                                print(tweet['user']['name'])
+                                print(tweet['user']['description'])
+                                return False
 
                     # SHOW REMOVED TWEETS
                     # if the tweet has kpop or porn on the username:
