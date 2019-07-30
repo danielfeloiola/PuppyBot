@@ -156,7 +156,7 @@ class MyStreamListener(tweepy.StreamListener):
                 print('about to retweet')
                 api.retweet(status.id)
                 print('RETWEETED!!!')
-                sleep(3000) # for tweeting every 50 mins
+                sleep(1800) # for tweeting every 50 mins
                 print('done sleeping!')
             except:
                 print('passing...')
