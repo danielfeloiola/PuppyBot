@@ -77,6 +77,14 @@ def check_safety(status):
 
                         if len(status.text) > 6:
 
+                            for char in tweet['user']['description']:
+                                if ord(char) > 256:
+                                    return False
+
+                            for char in tweet['user']['name']:
+                                if ord(char) > 256:
+                                    return False
+
                             if tweet['possibly_sensitive'] == False:
 
                                 # say its safe
@@ -93,6 +101,9 @@ def check_safety(status):
                                 print(tweet['user']['description'])
                                 return False
 
+                        else:
+                            print("status is too short")
+                            print(status.text)
                     # SHOW REMOVED TWEETS
                     # if the tweet has kpop or porn on the username:
                     else:
@@ -109,6 +120,15 @@ def check_safety(status):
                     print(tweet['user']['name'])
                     print(tweet['user']['description'])
                     return False
+
+
+            # if the user profile has no description:
+            else:
+                print('FOUND A UNSAFE ONE!!! - EMPTY DESCRIPTION')
+                print(status.text)
+                print(tweet['user']['name'])
+                print(tweet['user']['description'])
+                return False
 
         # if the tweet has kpop or porn on the text:
         else:
