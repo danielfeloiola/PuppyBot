@@ -37,7 +37,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 import requests
 
 # TF detector
-from dog_app3 import dog_detector
+from dog_app import dog_detector
 
 # make a database
 engine = create_engine(os.getenv("DATABASE_URI"))
