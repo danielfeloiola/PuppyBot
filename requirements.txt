@@ -2,7 +2,6 @@ tweepy
 python-dotenv
 sqlalchemy
 psycopg2-binary
-pipenv
 h5py==2.6.0
 pip==19.3.1
 matplotlib==2.0.0
