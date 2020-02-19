@@ -1,3 +1,1 @@
 A BOT THAT RETWEETS IMAGES OF PUPPIES
-
-opencv-python==3.2.0.6
