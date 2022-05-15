@@ -104,3 +104,4 @@ while not stream.running:
 
     finally:
         print("Stream has crashed. System will restart twitter stream soon!")
+        
