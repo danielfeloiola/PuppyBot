@@ -1,0 +1,41 @@
+# =========================
+# Segredos e Configurações (NUNCA suba isso)
+# =========================
+.env
+*.env
+.env.*
+
+# =========================
+# Ambientes Virtuais (O Poetry já cuida disso, mas é bom garantir)
+# =========================
+.venv/
+venv/
+env/
+
+# =========================
+# Python Cache e Lixo de Compilação
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+
+# =========================
+# Chatices do macOS
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# =========================
+# Editores de Código (Opcional, mas recomendado)
+# =========================
+.vscode/
+.idea/
