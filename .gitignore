@@ -35,7 +35,22 @@ Icon
 .Trashes
 
 # =========================
+# Logs
+# =========================
+logs/
+
+# =========================
+# Bad words list
+# =========================
+bad_words.json
+
+# =========================
 # Editores de Código (Opcional, mas recomendado)
 # =========================
 .vscode/
 .idea/
+
+# =========================
+# Arquivos com anotações e testes locais
+# =========================
+tralha/
