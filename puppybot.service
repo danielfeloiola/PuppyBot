@@ -1,0 +1,23 @@
+[Unit]
+Description=puppybot — Bluesky dog repost bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=puppybot
+WorkingDirectory=/opt/puppybot
+ExecStart=/opt/puppybot/.venv/bin/python puppybot.py
+Restart=on-failure
+RestartSec=30
+
+# Credentials — fill these in on the server
+Environment="BSKY_HANDLE=your-handle.bsky.social"
+Environment="BSKY_APP_PASSWORD=your-app-password"
+
+# Log goes to journald (view with: journalctl -u puppybot -f)
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
