@@ -35,7 +35,7 @@ log = logging.getLogger("test_detector")
 TEST_CASES = [
     {
         "name": "Labrador (should detect dog)",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/2/26/YellowLabradorLooking_new.jpg",
+        "url": "https://portalvet.royalcanin.com.br/media/wp-content/uploads/2021/03/Yellow_Labrador_standing_in_a_field_Med._Res.___Basic_15295-720x550.jpg",
         "expected": True,
     },
     {
