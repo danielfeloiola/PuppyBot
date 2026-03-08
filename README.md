@@ -35,8 +35,8 @@ Logs every dog it would have reposted without actually posting anything. No cool
 
 ## To-do
 
-- [ ] Investigate Labrador false negative in `tests/test_detector.py` — ResNet50 not detecting that specific Wikimedia image
-- [ ] First real production run — set credentials, run without `DRY_RUN`, confirm reposts land on the account
+- [x] Investigate Labrador false negative in `tests/test_detector.py` — ResNet50 not detecting that specific Wikimedia image
+- [x] First real production run — set credentials, run without `DRY_RUN`, confirm reposts land on the account
 - [ ] Opt-out: watch for replies/mentions from the original poster asking to remove the repost (e.g. "delete", "remove", "opt out") and automatically call `unrepost()` + reply confirming
 
 ## Project structure
