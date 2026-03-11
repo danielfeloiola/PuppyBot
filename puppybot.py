@@ -133,7 +133,7 @@ class PuppyHandler(EventHandler):
         self._reposted: deque[str] = deque(maxlen=DEDUP_MAX_SIZE)
         self._reposted_set: set[str] = set()
         self._executor = ThreadPoolExecutor(max_workers=MAX_CONCURRENT_DETECTIONS)
-        self._last_repost_at: float = 0.0
+        self._last_repost_at: float = -REPOST_COOLDOWN
 
     async def on_post_create(self, did: str, rkey: str, record: dict, raw: dict):
         # 1. Language filter — English only
