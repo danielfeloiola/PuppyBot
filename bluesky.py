@@ -28,6 +28,14 @@ class BlueskyAccount:
         return profile
 
     def repost(self, uri: str, cid: str) -> dict:
-        resp = self.client.repost(uri, cid)
+        try:
+            resp = self.client.repost(uri, cid)
+        except Exception as e:
+            if "ExpiredToken" in str(e) or "Token" in str(e):
+                log.warning("Session token expired — re-logging in...")
+                self.login()
+                resp = self.client.repost(uri, cid)
+            else:
+                raise
         log.info(f"Reposted: {uri}")
         return resp
