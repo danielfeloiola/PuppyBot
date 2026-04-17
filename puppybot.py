@@ -66,7 +66,7 @@ MAX_CONCURRENT_DETECTIONS = 3
 DEDUP_MAX_SIZE = 1_000
 
 # Cooldown between reposts in production mode
-REPOST_COOLDOWN = 55 * 60  # 55 min
+REPOST_COOLDOWN = 90 * 60  # 90 min
 
 # Keywords that must appear in the post text or image alt-text
 # (checked before running TensorFlow — cheap pre-filter)
@@ -129,6 +129,8 @@ class PuppyHandler(EventHandler):
     def __init__(self, bsky: BlueskyAccount | None, dry_run: bool = False):
         self.bsky = bsky
         self.dry_run = dry_run
+        self.client: "JetstreamClient | None" = None
+        self.cooldown_requested: bool = False
         self._semaphore = asyncio.Semaphore(MAX_CONCURRENT_DETECTIONS)
         self._reposted: deque[str] = deque(maxlen=DEDUP_MAX_SIZE)
         self._reposted_set: set[str] = set()
@@ -213,6 +215,8 @@ class PuppyHandler(EventHandler):
                 self.bsky.repost(uri, commit_cid)
                 self._last_repost_at = time.monotonic()
                 log.info(f"WOOF! Reposted: {uri}")
+                self.cooldown_requested = True
+                await self.client.stop()
             except Exception as e:
                 log.error(f"Failed to repost {uri}: {e}")
                 return
@@ -249,14 +253,35 @@ async def main():
         stats_interval=1_000,
     )
     client = JetstreamClient(jetstream_config, handler)
+    handler.client = client
 
     # Graceful shutdown on Ctrl+C / SIGTERM
+    shutdown = asyncio.Event()
     loop = asyncio.get_event_loop()
+    def _shutdown():
+        shutdown.set()
+        asyncio.create_task(client.stop())
     for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, lambda: asyncio.create_task(client.stop()))
+        loop.add_signal_handler(sig, _shutdown)
 
     log.info("puppybot starting... WOOF!")
-    await client.start()
+
+    while not shutdown.is_set():
+        client.running = True
+        await client.start()
+
+        if shutdown.is_set():
+            break
+
+        if handler.cooldown_requested:
+            handler.cooldown_requested = False
+            mins = REPOST_COOLDOWN // 60
+            log.info(f"Disconnected from Jetstream. Cooling down for {mins} min...")
+            try:
+                await asyncio.wait_for(shutdown.wait(), timeout=REPOST_COOLDOWN)
+            except asyncio.TimeoutError:
+                log.info("Cooldown done — reconnecting to Jetstream...")
+
     client.print_stats()
 
 
