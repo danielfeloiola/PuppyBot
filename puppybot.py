@@ -59,8 +59,13 @@ BSKY_APP_PASSWORD = os.environ.get("BSKY_APP_PASSWORD", "")
 # Set DRY_RUN=1 to log detections without actually reposting
 DRY_RUN = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
 
-# Max concurrent TensorFlow detections (CPU-bound)
-MAX_CONCURRENT_DETECTIONS = 3
+# Max concurrent TensorFlow detections.
+# Must stay at 1: the ResNet50 model in detector.py is a single shared Keras
+# object and is NOT thread-safe for concurrent inference. Running >1 at once
+# makes each call stall past DETECTION_TIMEOUT; the timed-out threads can't be
+# killed, so they permanently occupy the executor and every later detection
+# times out too (zero reposts). Detection is off the read loop either way.
+MAX_CONCURRENT_DETECTIONS = 1
 
 # Max number of post URIs kept in memory for deduplication
 DEDUP_MAX_SIZE = 1_000
